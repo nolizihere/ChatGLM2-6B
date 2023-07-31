@@ -36,12 +36,12 @@ temperature = st.sidebar.slider(
 )
 
 if 'history' not in st.session_state:
-    st.session_state.history = []
+    st.session_state['history'] = []
 
 if 'past_key_values' not in st.session_state:
-    st.session_state.past_key_values = None
+    st.session_state['past_key_values'] = None
 
-for i, (query, response) in enumerate(st.session_state.history):
+for i, (query, response) in enumerate(st.session_state['history']):
     with st.chat_message(name="user", avatar="user"):
         st.markdown(query)
     with st.chat_message(name="assistant", avatar="assistant"):
@@ -59,7 +59,7 @@ button = st.button("发送", key="predict")
 
 if button:
     input_placeholder.markdown(prompt_text)
-    history, past_key_values = st.session_state.history, st.session_state.past_key_values
+    history, past_key_values = st.session_state['history'], st.session_state['past_key_values']
     for response, history, past_key_values in model.stream_chat(tokenizer, prompt_text, history,
                                                                 past_key_values=past_key_values,
                                                                 max_length=max_length, top_p=top_p,
@@ -67,5 +67,5 @@ if button:
                                                                 return_past_key_values=True):
         message_placeholder.markdown(response)
 
-    st.session_state.history = history
-    st.session_state.past_key_values = past_key_values
+    st.session_state['history'] = history
+    st.session_state['past_key_values'] = past_key_values
